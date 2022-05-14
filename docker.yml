@@ -26,25 +26,29 @@
         state: present
         update_cache: yes
 
-    - name: manual update
-      apt:
-        update_cache: yes
-
     - name: install docker
       apt:
-        name: "{{item}}"
+        name: docker
         state: latest
         update_cache: yes
-      loop:
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
 
     - name: make sure docker is started
       service:
         name: docker
         state: started
         enabled: yes
+
+    - name: add docker group
+      group:
+        name: docker
+        state: present
+
+    - name: add user to docker group
+      user:
+        name: pi
+        groups:
+          - docker
+        append: yes
 
   handlers:
     - name: restart docker
