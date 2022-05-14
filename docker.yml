@@ -26,9 +26,13 @@
         state: present
         update_cache: yes
 
+    - name: manual update
+      apt:
+        update_cache: yes
+
     - name: install docker
       apt:
-        name: docker-ce
+        name: "{{item}}"
         state: latest
         update_cache: yes
       loop:
