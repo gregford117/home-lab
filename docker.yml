@@ -45,7 +45,7 @@
 
     - name: add user to docker group
       user:
-        name: pi
+        name: "{{ ansible_user_id }}"
         groups:
           - docker
         append: yes
