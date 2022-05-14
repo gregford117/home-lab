@@ -32,6 +32,14 @@
         state: latest
         update_cache: yes
 
+    - name: install docker compose
+      raw: curl -L https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-linux-{{ ansible_architecture }} -o /usr/local/bin/docker-compose
+      args:
+        executable: /bin/bash
+
+    - name: give executable permission to docker-compose
+      raw: chmod +x /usr/local/bin/docker-compose
+
     - name: make sure docker is started
       service:
         name: docker
