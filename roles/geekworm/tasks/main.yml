@@ -1,0 +1,51 @@
+---
+- name: install dependencies
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - git
+    - pigpio
+    - python3-pigpio
+    - python3-smbus
+    - python3-rpi.gpio
+
+- name: create directory
+  file:
+    path: "{{ geekworm_folder }}"
+    state: directory
+
+- name: clone fan controller repo
+  git:
+    repo: https://github.com/geekworm-com/x735-v2.5
+    clone: yes
+    force: yes
+    dest: "{{ geekworm_folder }}"
+    single_branch: yes
+
+- name: get list of shell scripts
+  find:
+    paths: "{{ geekworm_folder }}"
+    patterns: '*.sh'
+    file_type: file
+  register: scripts
+
+- name: give execute permission to shell scripts
+  file:
+    dest: "{{ item.path }}"
+    mode: +x
+  with_items: "{{ scripts.files }}"
+
+- name: install fan controller
+  raw: "{{ geekworm_folder }}/install.sh"
+  args:
+    executable: /bin/bash
+
+- name: alias script
+  lineinfile:
+    path: "{{ homedir }}/.bashrc"
+    line: "alias x735off='sudo x735softsd.sh'"
+    regex: "alias x735off='sudo x735softsd.sh'"
+    state: present
+

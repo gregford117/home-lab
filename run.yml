@@ -1,0 +1,16 @@
+---
+- hosts: media
+  become: yes
+
+  roles:
+    - role: init
+      tags:
+        - init
+
+    - role: geekworm
+      tags:
+        - init
+
+    - role: docker
+      tags:
+        - docker
