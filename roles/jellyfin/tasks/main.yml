@@ -1,0 +1,30 @@
+---
+- name: "create {{ container_name }} config directory"
+  file:
+    path: "/etc/docker/{{ container_name }}"
+    state: directory
+
+- name: "{{ container_name }}"
+  docker_container:
+    name: "{{ container_name }}"
+    image: linuxserver/jellyfin
+    pull: yes
+    state: started
+    ports:
+      - "8096:8096"
+      - "7359:7359/udp"
+    env:
+      "PUID": "{{ ansible_effective_user_id }}"
+      "PGID": "{{ ansible_effective_group_id }}"
+      "TZ": "Europe/London"
+      "JELLYFIN_PublishedServerUrl": "{{ ansible_default_ipv4.address }}"
+    devices:
+      - "/dev/vcsm:/dev/vcsm"
+      - "/dev/vchiq:/dev/vchiq"
+    volumes:
+      - "/opt/vc/lib:/opt/vc/lib"
+      - "{{ media_dir }}/movies:/data/movies"
+      - "{{ media_dir }}/tv:/data/tv"
+      - "{{ media_dir }}/anime:/data/anime"
+      - "/etc/docker/{{ container_name }}:/config"
+    restart_policy: unless-stopped

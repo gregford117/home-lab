@@ -5,3 +5,6 @@ homedir: "/home/{{ username }}"
 
 # geekworm
 geekworm_folder: "{{ homedir }}/x735-v2.5"
+
+# jellyfin
+media_dir: /mnt/media
