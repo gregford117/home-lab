@@ -14,12 +14,12 @@
       - "8096:8096"
       - "7359:7359/udp"
     env:
-      "PUID": "{{ ansible_effective_user_id }}"
-      "PGID": "{{ ansible_effective_group_id }}"
+      "PUID": "{{ ansible_effective_user_id | string }}"
+      "PGID": "{{ ansible_effective_group_id | string }}"
       "TZ": "Europe/London"
       "JELLYFIN_PublishedServerUrl": "{{ ansible_default_ipv4.address }}"
     devices:
-      - "/dev/vcsm:/dev/vcsm"
+      - "/dev/vcsm-cma:/dev/vcsm"
       - "/dev/vchiq:/dev/vchiq"
     volumes:
       - "/opt/vc/lib:/opt/vc/lib"
